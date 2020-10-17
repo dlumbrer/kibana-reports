@@ -24,7 +24,14 @@ import {
   addSuccessOrFailureToast,
   contextMenuViewReports,
 } from './context_menu_helpers';
-import { popoverMenu, popoverMenuDiscover, getMenuItem } from './context_menu_ui';
+import { popoverMenu, popoverMenuDiscover, getMenuItem, getKibiterMenu } from './context_menu_ui';
+import angular from 'angular';
+import { renderKibiterMenu } from './render_kibiter_menu'
+import { retrieveKibiterMenuData } from './retrieve_kibiter_menu_data';
+import './kibiter_menu_style.scss';
+
+
+
 
 const replaceQueryURL = () => {
   let url = window.location.href;
@@ -224,11 +231,76 @@ $(function () {
   locationHashChanged();
 });
 
-function locationHashChanged() {
-  const observer = new MutationObserver(function (mutations) {
+async function getProjectName() {
+  const url = window.location.href.split("/app/")
+  const response = await fetch(url[0] + '/api/reporting/getprojectname', {
+    method: 'GET',
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    mode: 'cors',
+    credentials: 'include',
+  })
+  const json = await response.json();
+  return json
+}
+
+async function getMetadashboard() {
+  const url = window.location.href.split("/app/")
+  const response = await fetch(url[0] + '/api/reporting/getmetadashboard', {
+    method: 'GET',
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    mode: 'cors',
+    credentials: 'include',
+  })
+  const json = await response.json();
+  return json
+}
+
+async function locationHashChanged() {
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  const url = window.location.href.split("/app/")
+  const projectname = await getProjectName()
+  console.log(projectname)
+  const metadashboard = await getMetadashboard()
+  console.log(metadashboard)
+  // fetch(url[0] + '/api/reporting/getprojectname', {
+  //   method: 'GET',
+  //   referrerPolicy: 'strict-origin-when-cross-origin',
+  //   mode: 'cors',
+  //   credentials: 'include',
+  // })
+  //   .then((response) => {
+  //     console.log(response)
+  //     if (response.status === 200) {
+  //       //$('#reportGenerationProgressModal').remove();
+  //       //addSuccessOrFailureToast('success');
+  //       //projectname = response.json()
+  //       //addSuccessOrFailureToast('failure');
+  //     }
+  //     return response.json();
+  //   })
+  //   .then(async (data) => {
+  //     console.log(data)
+  //     projectname = data;
+  //     return data;
+  //   });
+  ////////////////////////////////////////////////////////////////////////////////////
+
+  const observer = new MutationObserver(async function (mutations) {
     const navMenu = document.querySelectorAll(
       'span.kbnTopNavMenu__wrapper > div.euiFlexGroup'
     );
+
+
+
+    const navBarMenu = document.querySelectorAll(
+      '#dashboardChrome'
+    )
+
+
+
+
+
     if (navMenu && navMenu.length && navMenu[0].children.length > 1) {
       try {
         if ($('#downloadReport').length) {
@@ -237,6 +309,27 @@ function locationHashChanged() {
         const menuItem = document.createElement('div');
         menuItem.innerHTML = getMenuItem('Reporting');
         navMenu[0].appendChild(menuItem.children[0]);
+
+        const kibiterMenuItem = document.createElement('div');
+        let compile = angular.injector(['ng']).get('$compile')
+
+        let scope = angular.element(navBarMenu[0]).scope()
+        //angular.injector(['ng']).get('$rootScope')
+
+        navBarMenu[0].insertBefore(kibiterMenuItem, navBarMenu[0].firstChild)
+        kibiterMenuItem.innerHTML = getKibiterMenu();
+        compile(kibiterMenuItem)(scope);
+        renderKibiterMenu(scope.$root)
+        scope.$root.appTitleCustom = projectname.data.projectname.name
+        scope.$root.showKibiterMenu = false
+        scope.$root.metadash = metadashboard.data.metadashboard
+        // await getProjectName().then(function (resp) {
+        //   scope.$root.appTitleCustom = resp
+        // })
+
+
+
+
       } catch (e) {
         console.log(e);
       } finally {

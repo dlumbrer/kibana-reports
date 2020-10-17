@@ -24,6 +24,56 @@ export const getMenuItem = (name) => {
   `
 }
 
+export const getKibiterMenu = () => {
+  return `
+<div class="kuiLocalNavRow theme-dark kibiterLocalNav">
+  <div class="kuiLocalNavRow__section">
+    <div class="kuiLocalBreadcrumbs">
+      <div class="kuiLocalBreadcrumb">
+        <a ng-show="$root.appTitleCustom" class="kuiLocalBreadcrumb__link projectName" ng-click="$root.redirectToPanel('Overview')">
+          {{$root.appTitleCustom}}
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="kuiLocalNavRow__section">
+    <div class="kuiLocalMenu">
+      <button class="kuiLocalMenuItem kibiterLocalMenuItem" ng-class="{ 'selected-item': item == $root.selectedItem }"
+        ng-click="$root.showInfo(item)" ng-repeat="item in $root.metadash">
+        {{item.name}}
+      </button>
+    </div>
+  </div>
+</div>
+<div class="kuiLocalDropdown kibiterLocalDropdown" ng-if="$root.showKibiterMenu">
+  <!-- Dropdown close button -->
+  <div className="kuiLocalDropdownPanels">
+    <div class="col-md-4" style="margin-top: 20px">
+      <div class="kibiterLocalDropdownTitle" ng-show="$root.showDescriptionDiv">{{ $root.descriptionTitle }}</div>
+
+      <div class="kibiterLocalDropdownText" ng-show="$root.showDescriptionDiv">
+        {{ $root.descriptionContent }}
+      </div>
+    </div>
+    <div class="col-md-2" ng-repeat="(i, column) in $root.currentPanelsons track by $index">
+      <div class="kibiterLocalDropdownTitle" ng-if="i === 0">{{$root.parentDashboard.title}}</div>
+      <div style="height: 25px" ng-if="i !== 0"></div>
+      <div>
+        <ul class="list-unstyled">
+          <li ng-repeat="subitem in $root.currentPanelsons[i]" class="ng-scope">
+            <a ng-mouseover="$root.showDescription(subitem)" ng-mouseleave="$root.hideDescription()" class="kuiLink submenuitem"
+              tabindex="0" role="button" ng-click="$root.redirectToPanel(subitem.name, subitem.panel_id)">{{subitem.name}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+  `
+}
+
 export const popoverMenu = () => {
     return `
     <div>

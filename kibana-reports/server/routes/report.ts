@@ -144,6 +144,91 @@ export default function (router: IRouter) {
     }
   );
 
+//////////////////////////////////////////////////////////////////////////////////////
+  router.get(
+    {
+      path: `${API_PREFIX}/getprojectname`,
+      validate: {}
+    },
+    async (
+      context,
+      request,
+      response
+    ): Promise<IKibanaResponse<any | ResponseError>> => {
+      // get report
+      try {
+        const esResp = await context.core.elasticsearch.legacy.client.callAsCurrentUser(
+          'get',
+          {
+            index: ".kibana",
+            id: "projectname",
+          }
+        );
+        const responseES = esResp._source;
+
+        console.log("QUIIIIIIIIIIIIIII")
+        console.log(responseES)
+
+        return response.ok({
+          body: {
+            data: responseES
+          }
+        })
+
+      } catch (error) {
+        //@ts-ignore
+        context.reporting_plugin.logger.error(
+          `Failed to get project name by id: ${error}`
+        );
+        console.log(error)
+        return errorResponse(response, error);
+      }
+    }
+  );
+
+  router.get(
+    {
+      path: `${API_PREFIX}/getmetadashboard`,
+      validate: {}
+    },
+    async (
+      context,
+      request,
+      response
+    ): Promise<IKibanaResponse<any | ResponseError>> => {
+      // get report
+      try {
+        const esResp = await context.core.elasticsearch.legacy.client.callAsCurrentUser(
+          'get',
+          {
+            index: ".kibana",
+            id: "metadashboard",
+          }
+        );
+        const responseES = esResp._source;
+
+        console.log("QUIIIIIIIIIIIIIII")
+        console.log(responseES)
+
+        return response.ok({
+          body: {
+            data: responseES
+          }
+        })
+
+      } catch (error) {
+        //@ts-ignore
+        context.reporting_plugin.logger.error(
+          `Failed to get project name by id: ${error}`
+        );
+        console.log(error)
+        return errorResponse(response, error);
+      }
+    }
+  );
+//////////////////////////////////////////////////////////////////////////////////////
+
+
   // get all reports details
   router.get(
     {
