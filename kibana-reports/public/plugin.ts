@@ -17,27 +17,20 @@ import {
   AppMountParameters,
   CoreSetup,
   CoreStart,
-  Plugin,
 } from '../../../src/core/public';
 import {
-  OpendistroKibanaReportsPluginSetup,
-  OpendistroKibanaReportsPluginStart,
   AppPluginStartDependencies,
 } from './types';
 import './components/kibiter_menu/kibiter_menu';
 import { PLUGIN_NAME } from '../common';
 
-export class OpendistroKibanaReportsPlugin
-  implements
-    Plugin<
-      OpendistroKibanaReportsPluginSetup,
-      OpendistroKibanaReportsPluginStart
-    > {
-  public setup(core: CoreSetup): OpendistroKibanaReportsPluginSetup {
+export class KibiterMenuPlugin
+{
+  public setup(core: CoreSetup) {
     // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_NAME,
-      title: 'Reporting',
+      title: 'KibiterMenu',
       async mount(params: AppMountParameters) {
         // Load application bundle
         const { renderApp } = await import('./application');
@@ -56,7 +49,7 @@ export class OpendistroKibanaReportsPlugin
     return {};
   }
 
-  public start(core: CoreStart): OpendistroKibanaReportsPluginStart {
+  public start(core: CoreStart) {
     return {};
   }
 

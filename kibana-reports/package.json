@@ -1,7 +1,7 @@
 {
-  "name": "opendistro_kibana_reports",
-  "version": "1.10.1.0",
-  "description": "Kibana Reporting Plugin",
+  "name": "kibitermenu",
+  "version": "0.0.1",
+  "description": "Kibana Custom Menu Plugin",
   "license": "Apache-2.0",
   "main": "index.js",
   "kibana": {
@@ -14,11 +14,7 @@
     "es": "node ../../scripts/es",
     "lint": "eslint .",
     "start": "plugin-helpers start",
-    "test:server": "plugin-helpers test:server",
-    "test:browser": "plugin-helpers test:browser",
-    "build": "plugin-helpers build",
-    "test:jest": "../../node_modules/.bin/jest --config ./test/jest.config.js",
-    "test": "jest --config ./test/jest.config.js"
+    "build": "plugin-helpers build"
   },
   "dependencies": {
     "@babel/core": "^7.10.2",
@@ -32,7 +28,6 @@
     "cron-validator": "^1.1.1",
     "elastic-builder": "^2.7.1",
     "jquery": "^3.5.0",
-    "json-2-csv": "^3.7.6",
     "moment": "link:../../packages/moment",
     "puppeteer": "^5.3.1",
     "react-id-generator": "^3.0.1",
@@ -82,7 +77,6 @@
     "jest": "^26.0.1",
     "jest-cli": "^26.0.1",
     "jest-dom": "^4.0.0",
-    "json-2-csv": "^3.7.6",
     "prettier": "2.0.5",
     "react-test-renderer": "^16.13.1",
     "ts-jest": "^26.1.0",

@@ -17,6 +17,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppMountParameters, CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
+import {
+  EuiPage,
+  EuiPageBody,
+  EuiPageContent,
+  EuiPageContentHeader,
+  EuiPageContentHeaderSection,
+  EuiPageHeader,
+  EuiPageHeaderSection,
+  EuiTitle,
+} from '@elastic/eui';
 
 export const renderApp = (
   { notifications, http, chrome }: CoreStart,
@@ -24,7 +34,26 @@ export const renderApp = (
   { appBasePath, element }: AppMountParameters
 ) => {
   ReactDOM.render(
-    <div/>,
+    <EuiPage>
+    <EuiPageBody component="div">
+      <EuiPageHeader>
+        <EuiPageHeaderSection>
+          <EuiTitle size="l">
+            <h1>Kibiter custom Menu</h1>
+          </EuiTitle>
+        </EuiPageHeaderSection>
+      </EuiPageHeader>
+      <EuiPageContent>
+        <EuiPageContentHeader>
+          <EuiPageContentHeaderSection>
+            <EuiTitle>
+              <h2>For seeing the menu at the top, please go to a dashboard page.</h2>
+            </EuiTitle>
+          </EuiPageContentHeaderSection>
+        </EuiPageContentHeader>
+      </EuiPageContent>
+    </EuiPageBody>
+  </EuiPage>,
     element
   );
 

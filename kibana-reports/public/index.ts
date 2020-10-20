@@ -15,14 +15,10 @@
 
 import './index.scss';
 
-import { OpendistroKibanaReportsPlugin } from './plugin';
+import { KibiterMenuPlugin } from './plugin';
 
 // This exports static code and TypeScript types,
 // as well as, Kibana Platform `plugin()` initializer.
 export function plugin() {
-  return new OpendistroKibanaReportsPlugin();
+  return new KibiterMenuPlugin();
 }
-export {
-  OpendistroKibanaReportsPluginSetup,
-  OpendistroKibanaReportsPluginStart,
-} from './types';
