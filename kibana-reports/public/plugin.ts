@@ -24,7 +24,7 @@ import {
   OpendistroKibanaReportsPluginStart,
   AppPluginStartDependencies,
 } from './types';
-import './components/context_menu/context_menu';
+import './components/kibiter_menu/kibiter_menu';
 import { PLUGIN_NAME } from '../common';
 
 export class OpendistroKibanaReportsPlugin

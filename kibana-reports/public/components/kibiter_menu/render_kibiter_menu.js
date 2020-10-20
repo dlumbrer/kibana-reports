@@ -29,7 +29,7 @@ export function renderKibiterMenu($scope) {
         if (name === "Contact") {
             window.location.replace(panel_id)
         } else {
-            window.location.replace(window.location.href.split("app/")[0] + "app/kibana#/dashboard/" + panel_id)
+            window.location.replace(window.location.href.split("app/")[0] + "app/dashboards#/view/" + panel_id)
         }
     }
 

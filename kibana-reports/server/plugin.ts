@@ -17,20 +17,10 @@ import {
   PluginInitializerContext,
   CoreSetup,
   CoreStart,
-  Plugin,
   Logger,
   ILegacyClusterClient,
 } from '../../../src/core/server';
-import { setIntervalAsync } from 'set-interval-async/dynamic';
-import reportsSchedulerPlugin from './backend/opendistro-reports-scheduler-plugin';
-import notificationPlugin from './backend/opendistro-notification-plugin';
-import {
-  OpendistroKibanaReportsPluginSetup,
-  OpendistroKibanaReportsPluginStart,
-} from './types';
 import registerRoutes from './routes';
-import { pollAndExecuteJob } from './utils/executor';
-import { POLL_INTERVAL } from './utils/constants';
 
 export interface ReportsPluginRequestContext {
   logger: Logger;
@@ -43,12 +33,8 @@ declare module 'kibana/server' {
   }
 }
 
-export class OpendistroKibanaReportsPlugin
-  implements
-    Plugin<
-      OpendistroKibanaReportsPluginSetup,
-      OpendistroKibanaReportsPluginStart
-    > {
+export class KibiterMenuPlugin
+{
   private readonly logger: Logger;
 
   constructor(initializerContext: PluginInitializerContext) {
@@ -56,75 +42,17 @@ export class OpendistroKibanaReportsPlugin
   }
 
   public setup(core: CoreSetup) {
-    this.logger.debug('opendistro_kibana_reports: Setup');
     const router = core.http.createRouter();
-
-    // TODO: create Elasticsearch client that aware of reports-scheduler API endpoints
-    // Deprecated API. Switch to the new elasticsearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
-    const schedulerClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
-      'reports_scheduler',
-      {
-        plugins: [reportsSchedulerPlugin],
-      }
-    );
-    const notificationClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
-      'notification',
-      {
-        plugins: [notificationPlugin],
-      }
-    );
 
     // Register server side APIs
     registerRoutes(router);
-
-    // put logger into route handler context, so that we don't need to pass through parameters
-    core.http.registerRouteHandlerContext(
-      //@ts-ignore
-      'reporting_plugin',
-      (context, request) => {
-        return {
-          logger: this.logger,
-          schedulerClient,
-          notificationClient,
-        };
-      }
-    );
 
     return {};
   }
 
   public start(core: CoreStart) {
-    this.logger.debug('opendistro_kibana_reports: Started');
+    this.logger.debug('kibiter menu plugin starting');
 
-    const schedulerClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
-      'reports_scheduler',
-      {
-        plugins: [reportsSchedulerPlugin],
-      }
-    );
-    const notificationClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
-      'notification',
-      {
-        plugins: [notificationPlugin],
-      }
-    );
-    const esClient: ILegacyClusterClient = core.elasticsearch.legacy.client;
-    /*
-    setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
-    while preventing multiple executions from overlapping in time.
-    Polling at at a 5 min fixed interval
-    
-    TODO: need further optimization polling with a mix approach of
-    random delay and dynamic delay based on the amount of jobs
-    */
-    setIntervalAsync(
-      pollAndExecuteJob,
-      POLL_INTERVAL,
-      schedulerClient,
-      notificationClient,
-      esClient,
-      this.logger
-    );
     return {};
   }
 

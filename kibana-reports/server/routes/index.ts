@@ -13,13 +13,9 @@
  * permissions and limitations under the License.
  */
 
-import registerReportRoute from './report';
-import registerReportDefinitionRoute from './reportDefinition';
-import registerReportSourceRoute from './getReportSource';
+import registerKibiterMenuRetrieveRoute from './menu';
 import { IRouter } from '../../../../src/core/server';
 
 export default function (router: IRouter) {
-  registerReportRoute(router);
-  registerReportDefinitionRoute(router);
-  registerReportSourceRoute(router);
+  registerKibiterMenuRetrieveRoute(router);
 }
